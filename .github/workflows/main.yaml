@@ -1,37 +1,77 @@
-name: "My first github action"
+name: 'My First GitHub Actions'
 
-on: ['push', 'pull_request']
-
-env:
-  WORKFLOW_LEVEL: "THIS VALUE COMES FROM THE WORKFLOW LEVEL"
+on:
+  push:
+    branches:
+    - main
+    tags:
+    - 'v*'
+  pull_request:
+    branches:
+    - main
 
 jobs:
-  first-job:
-    name: "first job"
+  build:
+    name: Build Apps
 
     runs-on: ubuntu-latest
 
     steps:
-      - name: output value 1
-        run: |
-          echo "first job"
+    - name: Checkout the repo
+      uses: actions/checkout@v2
 
-  second-job:
-    name: "second job"
-    needs: first-job
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.x'
+
+    - name: Restore NuGet packages
+      shell: bash
+      run: |
+        dotnet restore ./api
+
+    - name: Build solution
+      shell: bash
+      run: |
+        dotnet build ./api -c Release
+
+    - name: Create FunctionApp artifact
+      shell: bash
+      run: |
+        dotnet publish ./api -c Release -o ./api/bin/published
+
+    - name: Upload FunctionApp artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: apiapp
+        path: api/bin/published
+
+  release:
+    name: Release Apps
+    needs: build
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: output value 1
-        run: |
-          echo "second job"
+    - name: Download FunctionApp artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: apiapp
+        path: artifacts/api
 
-  third-job:
-    name: "third job"
-    needs: first-job
-    runs-on: ubuntu-latest
+    - name: Zip FunctionApp artifact
+      shell: bash
+      run: |
+        pushd artifacts/api
+        zip -qq -r apiapp.zip .
+        popd
 
-    steps:
-      - name: output value 1
-        run: |
-          echo "third job"
+        mv artifacts/api/apiapp.zip artifacts/apiapp.zip
+
+    - name: Release FunctionApp artifact to GitHub
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: false
+        files: |
+          artifacts/apiapp.zip

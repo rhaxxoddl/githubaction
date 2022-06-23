@@ -13,7 +13,7 @@ jobs:
       matrix:
         os: [ 'windows-latest', 'macos-latest', 'ubuntu-latest' ]
 
-    runs-on: ${{ matirx.os }}
+    runs-on: ${{ matrix.os }}
 
     env:
       JOB_LEVEL_1: "THIS COMES FROM JOB LEVEL 1"

@@ -25,3 +25,13 @@ jobs:
       - name: output value 1
         run: |
           echo "second job"
+
+  third-job:
+    name: "third job"
+    needs: first-job
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: output value 1
+        run: |
+          echo "third job"

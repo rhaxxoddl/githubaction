@@ -9,21 +9,19 @@ jobs:
   first-job:
     name: "first job"
 
-    strategy:
-      matrix:
-        os: [ 'windows-latest', 'macos-latest', 'ubuntu-latest' ]
-        nodejs: [ '14.x', '16.x' ]
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
       - name: output value 1
         run: |
-          echo "OS : ${{ matrix.os }}"
-          echo "NODEJS : ${{ matrix.nodejs }}"
+          echo "first job"
 
-      - name: output value 2
-        if: github.event_name == 'pull_request'
+  second-job:
+    name: "second job"
+    needs: first job
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: output value 1
         run: |
-          echo "OS : ${{ matrix.os }}"
-          echo "NODEJS : ${{ matrix.nodejs }}"
+          echo "second job"

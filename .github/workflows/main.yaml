@@ -9,46 +9,20 @@ jobs:
   first-job:
     name: "first job"
 
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ 'windows-latest', 'macos-latest', 'ubuntu-latest' ]
+
+    runs-on: ${{ matirx.os }}
 
     env:
       JOB_LEVEL_1: "THIS COMES FROM JOB LEVEL 1"
 
     steps:
-      - name: Say Hello World 1
+      - name: output value form ${{ matrix.os }}
+        id: first
         shell: bash
         env:
           STEP_LEVEL_1: "THIS COMES FROM STEP LEVEL 1"
         run: |
-          echo "Hello world from step 1"
-
-      - name: Say Hello World 2
-        shell: pwsh
-        env:
-          STEP_LEVEL_2: "THIS COMES FROM STEP LEVEL 2"
-        run: |
-          echo "Hello world from step 2"
-
-  second-job:
-    name: "second job"
-
-    runs-on: ubuntu-latest
-
-    env:
-      JOB_LEVEL_2: "THIS COMES FROM JOB LEVEL 2"
-
-    steps:
-      - name: set output value
-        id: first
-        shell: bash
-        run: |
-          first_value="This is the first output value"
-
-          echo "::add-mask::$first_value"
-          echo "::set-output name=my_first_value::$first_value"
-          echo "SECRET: ${{ secrets.HELLO }}"
-
-      - name: get output value
-        shell: bash
-        run: |
-          echo ${{ steps.first.outputs.my_first_value }}
+          echo "OS : ${{ matrix.os }}"

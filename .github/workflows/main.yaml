@@ -22,7 +22,6 @@ jobs:
           echo "OS : ${{ matrix.os }}"
           echo "NODEJS : ${{ matrix.nodejs }}"
 
-    steps:
       - name: output value 2
         if: github.event_name == 'pull_request'
         runs-on: ubuntu-latest

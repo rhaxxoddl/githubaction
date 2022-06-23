@@ -11,11 +11,11 @@ jobs:
     steps:
     - name: Say Hello World 1
       shell: bash
-      run:
+      run: |
         echo "Hello world from step 1"
 
     - name: Say Hello World 2
       shell: pwsh
-      run:
+      run: |
         echo "Hello world from step 2"
 

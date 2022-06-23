@@ -44,6 +44,7 @@ jobs:
         run: |
           first_value="This is the first output value"
 
+          echo "::add-mask::$first_value"
           echo "::set-output name=my_first_value::$first_value"
 
       - name: get output value

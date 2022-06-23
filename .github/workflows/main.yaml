@@ -12,6 +12,7 @@ jobs:
     strategy:
       matrix:
         os: [ 'windows-latest', 'macos-latest', 'ubuntu-latest' ]
+        nodejs: [ '14.x', '16.x' ]
 
     runs-on: ${{ matrix.os }}
 
@@ -19,6 +20,11 @@ jobs:
       JOB_LEVEL_1: "THIS COMES FROM JOB LEVEL 1"
 
     steps:
+      - name: Setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.nodejs }}
+
       - name: output value form ${{ matrix.os }}
         id: first
         shell: bash
@@ -26,3 +32,4 @@ jobs:
           STEP_LEVEL_1: "THIS COMES FROM STEP LEVEL 1"
         run: |
           echo "OS : ${{ matrix.os }}"
+          echo "NODEJS : ${{ matrix.nodejs }}"

@@ -1,0 +1,21 @@
+name: 'My first github action'
+
+on: push #  깃허브 액션이 시작되는 이벤트. 파일 하나당 이벤트 1개 추천
+
+jobs:
+  first-job:
+    name: 'first job'
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Say Hello World 1
+      shell: bash
+      run:
+        echo "Hello world from step 1"
+
+    - name: Say Hello World 2
+      shell: pwsh
+      run:
+        echo "Hello world from step 2"
+

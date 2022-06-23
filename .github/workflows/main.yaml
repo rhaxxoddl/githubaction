@@ -46,6 +46,7 @@ jobs:
 
           echo "::add-mask::$first_value"
           echo "::set-output name=my_first_value::$first_value"
+          echo "SECRET: ${{ secrets.HELLO }}"
 
       - name: get output value
         shell: bash

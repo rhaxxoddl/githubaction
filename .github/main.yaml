@@ -1,7 +1,7 @@
 name: 'My first github action'
 
 on: push #  깃허브 액션이 시작되는 이벤트. 파일 하나당 이벤트 1개 추천
-
+#hihi
 jobs:
   first-job:
     name: 'first job'
